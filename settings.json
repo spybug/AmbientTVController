@@ -1,0 +1,8 @@
+{
+  "corners": {
+    "top_left": {"x": 50, "y": 20},
+    "top_right": {"x": 605, "y": 20},
+    "bottom_left": {"x": 20, "y": 415},
+    "bottom_right": {"x": 620, "y": 415}
+  }
+}
