@@ -38,7 +38,7 @@ def average_pixels(image, horiz=16, vert=8):
         tr = vert_pixels * (col + 1)
         # returns tuple of len 4, but we ignore alpha channel
         color = np.uint8(cv2.mean(image[0:bl, tl:tr])[:3])
-        color_buffer.append(color)
+        color_buffer.append(tuple(color))
 
     # right col (top -> bottom)
     for row in range(vert):
@@ -47,7 +47,7 @@ def average_pixels(image, horiz=16, vert=8):
         top = vert_pixels * row
         bot = vert_pixels * (row + 1)
         color = np.uint8(cv2.mean(image[top:bot, lh:rh])[:3])
-        color_buffer.append(color)
+        color_buffer.append(tuple(color))
 
     # bottom row (right -> left)
     for col in range(horiz, -1, -1):
@@ -56,7 +56,7 @@ def average_pixels(image, horiz=16, vert=8):
         lh = horiz_pixels * col
         rh = horiz_pixels * (col + 1)
         color = np.uint8(cv2.mean(image[top:bot, lh:rh])[:3])
-        color_buffer.append(color)
+        color_buffer.append(tuple(color))
 
     # left col (bottom -> top)
     for row in range(vert, -1, -1):
@@ -64,7 +64,7 @@ def average_pixels(image, horiz=16, vert=8):
         top = vert_pixels * row
         bot = vert_pixels * (row + 1)
         color = np.uint8(cv2.mean(image[top:bot, 0:rh])[:3])
-        color_buffer.append(color)
+        color_buffer.append(tuple(color))
 
     return color_buffer
 

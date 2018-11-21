@@ -14,24 +14,12 @@ class LEDController:
                                         brightness=0.2, auto_write=False, pixel_order=led_order)
 
     # Update from top left corner
-    def update_colors(self, top_row, right_column, bottom_row, left_column):
-        if len(top_row) + len(right_column) + len(bottom_row) + len(left_column) != len(self.pixels):
+    def update_colors(self, color_buffer):
+        if len(color_buffer) != len(self.pixels):
             return False
 
         pixel_index = 0
-        for color in top_row:
-            self.pixels[pixel_index] = color
-            pixel_index += 1
-
-        for color in right_column:
-            self.pixels[pixel_index] = color
-            pixel_index += 1
-
-        for color in bottom_row:
-            self.pixels[pixel_index] = color
-            pixel_index += 1
-
-        for color in left_column:
+        for color in color_buffer:
             self.pixels[pixel_index] = color
             pixel_index += 1
 
