@@ -25,3 +25,11 @@ class LEDController:
 
         self.pixels.show()  # Update led strip
 
+    # Turn off all leds
+    def stop(self):
+        for i in range(len(self.pixels)):
+            self.pixels[i] = (0, 0, 0)
+
+        self.pixels.show()
+
+

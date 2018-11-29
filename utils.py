@@ -13,14 +13,8 @@ def average_point(point1, point2):
 
 def average_pixels(image, horiz=16, vert=8):
     '''
-    Apply a convolution (maybe) over the image to average colors of the scene.
-    u x x u     x = horizontal_regions
-    y     y     y = vertical_regions
-    y     y     u = nodes computed in both directions, for simplicity
-    u x x u
-
-    We want to create regions that will represent a single node (LED) in
-    the final output. The constants are defined with defaults.
+    Creates regions that will represent a single LED in
+    the final output. The constants are defined for horizontal and vertical pixel amounts
 
     Order should be clockwise top_row Left->Right, right_col Top->Bottom, bottom_row Right->Left, left_col Bottom->Top
     '''
@@ -36,7 +30,7 @@ def average_pixels(image, horiz=16, vert=8):
         bl = horiz_pixels
         tl = vert_pixels * col
         tr = vert_pixels * (col + 1)
-        # returns tuple of len 4, but we ignore alpha channel
+
         color = np.uint8(cv2.mean(image[0:bl, tl:tr])[:3])
         color_buffer.append(tuple(color))
 
@@ -46,6 +40,7 @@ def average_pixels(image, horiz=16, vert=8):
         lh = rh - horiz_pixels
         top = vert_pixels * row
         bot = vert_pixels * (row + 1)
+
         color = np.uint8(cv2.mean(image[top:bot, lh:rh])[:3])
         color_buffer.append(tuple(color))
 
@@ -55,6 +50,7 @@ def average_pixels(image, horiz=16, vert=8):
         top = bot - vert_pixels
         lh = horiz_pixels * col
         rh = horiz_pixels * (col + 1)
+
         color = np.uint8(cv2.mean(image[top:bot, lh:rh])[:3])
         color_buffer.append(tuple(color))
 
@@ -63,6 +59,7 @@ def average_pixels(image, horiz=16, vert=8):
         rh = horiz_pixels
         top = vert_pixels * row
         bot = vert_pixels * (row + 1)
+
         color = np.uint8(cv2.mean(image[top:bot, 0:rh])[:3])
         color_buffer.append(tuple(color))
 

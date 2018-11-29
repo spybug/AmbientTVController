@@ -1,5 +1,6 @@
 import cv2
 import threading
+import time
 
 #import led_control
 import utils
@@ -14,6 +15,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
 
 frame = None
 video = None
+running = True
 
 @app.route('/')
 def index():
@@ -85,23 +87,50 @@ def add_header(response):
     return response
 
 
-def start():
-    global frame, video
-    video = video_capture.VideoCapture()
+def main():
+    global frame, video, running
+
     #led_controller = led_control.LEDController(horiz_pixels, vert_pixels)
 
     while True:
-        frame = video.get_next_frame()
-        transformed_frame = video.transform_image(frame)
-        color_buffer = utils.average_pixels(transformed_frame, horiz_pixels, vert_pixels)
+        if running:
+            if video is None:
+                video = video_capture.VideoCapture()
 
-        cv2.imshow('res', transformed_frame)
+            frame = video.get_next_frame()
+            transformed_frame = video.transform_image(frame)
+            color_buffer = utils.average_pixels(transformed_frame, horiz_pixels, vert_pixels)
+            #led_controller.update_colors(color_buffer)
+            cv2.imshow('res', transformed_frame)
+
+        else:
+            if video is not None:
+                video.stop()
+                #led_controller.stop()
+                video = None
+
+            time.sleep(5)
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            running = False
+
+
+@app.route('/stop')
+def stop():
+    global running
+    running = False
+    return "<p>Stopped</p>"
+
+
+@app.route('/start')
+def start():
+    global running
+    running = True
+    return "<p>Started</p>"
 
 
 if __name__ == '__main__':
-    t = threading.Thread(target=start)
+    t = threading.Thread(target=main)
     t.start()
     app.run(host='0.0.0.0', port=5000)
 

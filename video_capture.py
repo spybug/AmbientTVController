@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 
 import json
+import time
 
 
 class VideoCapture:
@@ -13,11 +14,26 @@ class VideoCapture:
 
     def __init__(self, width=640, height=480):
         self.cap = cv2.VideoCapture(0)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        self._set_camera_settings(width, height)
         self.width = width
         self.height = height
         self._get_settings(self.settings_file)
+
+    def stop(self):
+        self.cap.release()
+        self.cap = None
+        time.sleep(5)
+
+    def _set_camera_settings(self, width, height):
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+        # saturation, brightness, contrast, gain, and exposure all settings should change
+        # self.cap.set(cv2.CAP_PROP_EXPOSURE, -7.5)
+        # self.cap.set(cv2.CAP_PROP_SATURATION, 0.5)
+        # self.cap.set(cv2.CAP_PROP_BRIGHTNESS, 0.5)
+        # self.cap.set(cv2.CAP_PROP_CONTRAST, 0.5)
+        # self.cap.set(cv2.CAP_PROP_GAIN, 0.5)
 
     def get_next_frame(self):
         ret, frame = self.cap.read()
