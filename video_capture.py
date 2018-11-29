@@ -9,6 +9,7 @@ class VideoCapture:
     top_left = None
     bottom_right = None
     bottom_left = None
+    settings_file = 'settings.json'
 
     def __init__(self, width=640, height=480):
         self.cap = cv2.VideoCapture(0)
@@ -16,19 +17,23 @@ class VideoCapture:
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         self.width = width
         self.height = height
-        self._get_settings('settings.json')
+        self._get_settings(self.settings_file)
 
     def get_next_frame(self):
         ret, frame = self.cap.read()
         self.height, self.width, _ = frame.shape
-
-        transformed_frame = self.transform_image(frame)
-
-        return transformed_frame
+        return frame
 
     def get_corners(self):
         """Returns corners in top left, top right, bottom left, bottom right order"""
         return [self.top_left, self.top_right, self.bottom_left, self.bottom_right]
+
+    def set_corners(self, new_corners):
+        if len(new_corners) == 4:
+            self.top_left = new_corners[0]
+            self.top_right = new_corners[1]
+            self.bottom_left = new_corners[2]
+            self.bottom_right = new_corners[3]
 
     def _get_settings(self, file_name):
         with open(file_name, 'r') as f:
@@ -43,6 +48,19 @@ class VideoCapture:
                 print(e)
                 print(data)
                 return
+
+    def save_settings(self):
+        json_data = {
+            'corners': {
+                'top_left': {'x': self.top_left[0], 'y': self.top_left[1]},
+                'top_right': {'x': self.top_right[0], 'y': self.top_right[1]},
+                'bottom_left': {'x': self.bottom_left[0], 'y': self.bottom_left[1]},
+                'bottom_right': {'x': self.bottom_right[0], 'y': self.bottom_right[1]}
+            }
+        }
+
+        with open(self.settings_file, 'w') as f:
+            json.dump(json_data, f)
 
     def transform_image(self, img):
         """ Convert Trapezoidal region to Rectangle for easier calculations """

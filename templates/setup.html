@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setup</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/setup.js"></script>
+</head>
+<body>
+    <h2>Setup the Camera Boundaries</h2>
+    <img src="/static/last_frame.jpg"/>
+    <div>
+        <label><input type="radio" name="corner-select" id="top-left" value="0">Top Left</label>
+        <label><input type="radio" name="corner-select" id="top-right" value="1">Top Right</label>
+        <label><input type="radio" name="corner-select" id="bottom-left" value="2">Bottom Left</label>
+        <label><input type="radio" name="corner-select" id="bottom-right" value="3">Bottom Right</label>
+    </div>
+    <div>
+        <button value="Up" onclick="updatePoints(value)">Up</button>
+        <button value="Down" onclick="updatePoints(value)">Down</button>
+        <button value="Left" onclick="updatePoints(value)">Left</button>
+        <button value="Right" onclick="updatePoints(value)">Right</button>
+    </div>
+    <br/>
+    <button value="Save" onclick="saveSettings()">Save Settings</button>
+</body>
+</html>
