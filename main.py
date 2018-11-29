@@ -15,6 +15,9 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
 frame = None
 video = None
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/setup')
 def setup():
