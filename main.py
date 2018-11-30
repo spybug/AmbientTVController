@@ -2,7 +2,7 @@ import cv2
 import threading
 import time
 
-#import led_control
+import led_control
 import utils
 import video_capture
 from flask import *
@@ -90,7 +90,7 @@ def add_header(response):
 def main():
     global frame, video, running
 
-    #led_controller = led_control.LEDController(horiz_pixels, vert_pixels)
+    led_controller = led_control.LEDController(horiz_pixels, vert_pixels)
 
     while True:
         if running:
@@ -100,13 +100,13 @@ def main():
             frame = video.get_next_frame()
             transformed_frame = video.transform_image(frame)
             color_buffer = utils.average_pixels(transformed_frame, horiz_pixels, vert_pixels)
-            #led_controller.update_colors(color_buffer)
+            led_controller.update_colors(color_buffer)
             cv2.imshow('res', transformed_frame)
 
         else:
             if video is not None:
                 video.stop()
-                #led_controller.stop()
+                led_controller.stop()
                 video = None
 
             time.sleep(5)
