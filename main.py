@@ -7,8 +7,8 @@ import utils
 import video_capture
 from flask import *
 
-horiz_pixels = 16
-vert_pixels = 8
+horiz_pixels = 26
+vert_pixels = 13
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
@@ -73,6 +73,9 @@ def update_point():
     video.set_corners(corners)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
 
 @app.route('/setup/save_settings', methods=['POST'])
 def save_settings():
@@ -101,8 +104,8 @@ def main():
             transformed_frame = video.transform_image(frame)
             color_buffer = utils.average_pixels(transformed_frame, horiz_pixels, vert_pixels)
             led_controller.update_colors(color_buffer)
-            cv2.imshow('res', transformed_frame)
 
+            # cv2.imshow('res', transformed_frame)
         else:
             if video is not None:
                 video.stop()

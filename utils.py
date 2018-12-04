@@ -16,7 +16,7 @@ def average_pixels(image, horiz=16, vert=8):
     Creates regions that will represent a single LED in
     the final output. The constants are defined for horizontal and vertical pixel amounts
 
-    Order should be clockwise top_row Left->Right, right_col Top->Bottom, bottom_row Right->Left, left_col Bottom->Top
+    Order should be clockwise starting from bottom left up, top left right, top right down, bottom right left
     '''
 
     height, width = image.shape[:2]
@@ -24,6 +24,15 @@ def average_pixels(image, horiz=16, vert=8):
     vert_pixels = int(height / vert)
 
     color_buffer = []
+
+    # left col (bottom -> top)
+    for row in range(vert, -1, -1):
+        rh = horiz_pixels
+        top = vert_pixels * row
+        bot = vert_pixels * (row + 1)
+
+        color = np.uint8(cv2.mean(image[top:bot, 0:rh])[:3])
+        color_buffer.append(tuple(color))
 
     # top row (left -> right)
     for col in range(horiz):
@@ -52,15 +61,6 @@ def average_pixels(image, horiz=16, vert=8):
         rh = horiz_pixels * (col + 1)
 
         color = np.uint8(cv2.mean(image[top:bot, lh:rh])[:3])
-        color_buffer.append(tuple(color))
-
-    # left col (bottom -> top)
-    for row in range(vert, -1, -1):
-        rh = horiz_pixels
-        top = vert_pixels * row
-        bot = vert_pixels * (row + 1)
-
-        color = np.uint8(cv2.mean(image[top:bot, 0:rh])[:3])
         color_buffer.append(tuple(color))
 
     return color_buffer
