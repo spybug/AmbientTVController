@@ -26,7 +26,7 @@ def average_pixels(image, horiz=16, vert=8):
     color_buffer = []
 
     # left col (bottom -> top)
-    for row in range(vert, -1, -1):
+    for row in range(vert - 1, -1, -1):
         rh = horiz_pixels
         top = vert_pixels * row
         bot = vert_pixels * (row + 1)
@@ -54,7 +54,7 @@ def average_pixels(image, horiz=16, vert=8):
         color_buffer.append(tuple(color))
 
     # bottom row (right -> left)
-    for col in range(horiz, -1, -1):
+    for col in range(horiz - 1, -1, -1):
         bot = height
         top = bot - vert_pixels
         lh = horiz_pixels * col
